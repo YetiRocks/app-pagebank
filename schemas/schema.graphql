@@ -1,0 +1,7 @@
+type PageCache @table(expiration: 3600) @export {
+  url: ID! @primaryKey
+  pageContents: String
+  contentType: String
+  statusCode: Int
+  cachedAt: String
+}

@@ -1,0 +1,25 @@
+name: app-pagebank
+version: "1.0"
+database: app-pagebank
+rest: true
+
+schemas:
+  - schemas/schema.graphql
+
+resources:
+  - resources/*.rs
+
+static_files:
+  path: web
+  route: /
+  index: index.html
+  notFound:
+    file: index.html
+    statusCode: 200
+  build:
+    sourceDir: source
+    command: npm run build
+
+# Origin server to fetch pages from on cache miss
+origin:
+  url: "https://www.example.com"

@@ -1,0 +1,33 @@
+/* app-pagebank: page-specific styles */
+
+/* ── Panel Body ── */
+.panel-body { flex: 1; display: flex; flex-direction: column; overflow-y: auto; min-height: 0; }
+
+/* ── Header Actions ── */
+.header-actions { display: flex; align-items: center; gap: var(--space-2); }
+
+/* ── Table Column Widths ── */
+.col-mime { width: 180px; color: var(--color-grey); }
+.col-size { width: 80px; color: var(--color-grey); }
+.col-status { width: 60px; color: var(--color-success); }
+
+/* ── Compare Panel ── */
+.compare-panel { display: flex; flex-direction: column; }
+.compare-panel .panel-header { flex-shrink: 0; }
+
+/* ── iFrame Container ── */
+.iframe-container { flex: 1; min-height: 0; position: relative; border-bottom: 1px solid var(--color-border-primary); background: var(--color-black-overlay); }
+.iframe-container iframe { width: 100%; height: 100%; border: none; opacity: 0; transition: opacity var(--transition-base); }
+.iframe-container.loaded iframe { opacity: 1; background: #fff; }
+
+/* ── Timing Badges ── */
+.timing-badge { padding: 2px 8px; font-size: var(--font-size-xs); font-weight: 600; font-family: var(--font-family-mono); border-radius: var(--radius-sm); }
+.origin-timing { color: var(--color-grey); background: var(--color-black-overlay); border: 1px solid var(--color-border-primary); }
+
+/* ── Cache Header Layout ── */
+.cache-header { display: flex; align-items: center; }
+.cache-header-center { flex: 1; display: flex; justify-content: center; }
+.cache-header-right { display: flex; gap: 0.5rem; align-items: center; }
+
+/* ── Speed Badge ── */
+.speed-badge { padding: 2px 8px; font-size: var(--font-size-xs); font-weight: 700; font-family: var(--font-family-mono); border-radius: var(--radius-sm); color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 10%, transparent); border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent); }
