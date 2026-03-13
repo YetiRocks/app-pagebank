@@ -1,4 +1,5 @@
-name: app-pagebank
+name: "Page Bank"
+app_id: "app-pagebank"
 version: "1.0"
 database: app-pagebank
 rest: true
