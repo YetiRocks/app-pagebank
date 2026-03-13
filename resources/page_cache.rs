@@ -46,8 +46,7 @@ resource!(PageCache {
         // Cache miss - fetch from origin
         yeti_log!(info, "Cache miss, fetching {}", target_url);
 
-        let response = fetch(&target_url, None)
-            .map_err(|e| YetiError::Internal(format!("Failed to fetch: {}", e)))?;
+        let response = fetch(&target_url, None)?;
 
         let ct = response.header("content-type").unwrap_or("text/html").to_string();
         let now = unix_timestamp()?.to_string();
@@ -62,12 +61,12 @@ resource!(PageCache {
         });
         table.put(&target_url, record).await?;
 
-        let cache_status = if response.is_success() { "MISS" } else { "ORIGIN_ERROR" };
+        let cache_status = if response.ok() { "MISS" } else { "ORIGIN_ERROR" };
 
         reply()
             .header("x-cache", cache_status)
             .header("x-origin-status", &response.status.to_string())
-            .code(if response.is_success() { 200 } else { 502 })
+            .code(if response.ok() { 200 } else { 502 })
             .type_header(&ct)
             .send(response.body.into_bytes())
     },
