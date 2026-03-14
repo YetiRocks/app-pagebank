@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
+import './theme'
 
 const API_BASE = window.location.origin + '/app-pagebank'
 
