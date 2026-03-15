@@ -21,6 +21,5 @@ static_files:
     sourceDir: source
     command: npm run build
 
-# Origin server to fetch pages from on cache miss
-origin:
-  url: "https://www.example.com"
+env:
+  PAGEBANK_ORIGIN_URL: "https://www.example.com"
