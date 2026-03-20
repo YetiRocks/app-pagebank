@@ -56,11 +56,9 @@ app-pagebank/
 ## Configuration
 
 ```yaml
-name: app-pagebank
+name: "Page Bank"
+app_id: "app-pagebank"
 version: "1.0"
-database: app-pagebank
-rest: true
-
 schemas:
   - schemas/schema.graphql
 
@@ -78,9 +76,8 @@ static_files:
     sourceDir: source
     command: npm run build
 
-# Origin server to fetch pages from on cache miss
-origin:
-  url: "https://www.example.com"
+env:
+  PAGEBANK_ORIGIN_URL: "https://www.example.com"
 ```
 
 ## Schema
