@@ -46,7 +46,7 @@ resource!(PageCache {
         // Cache miss - fetch from origin
         yeti_log!(info, "Cache miss, fetching {}", target_url);
 
-        let response = fetch(&target_url, None)?;
+        let response = fetch!(&target_url).send()?;
 
         let ct = response.header("content-type").unwrap_or("text/html").to_string();
         let now = unix_timestamp()?.to_string();
