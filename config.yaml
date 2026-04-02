@@ -1,5 +1,6 @@
 name: "Page Bank"
 app_id: "app-pagebank"
+customer_id: "yeti"
 version: "1.0"
 schemas:
   - schemas/schema.graphql
