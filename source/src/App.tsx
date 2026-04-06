@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
+import Footer from './components/Footer'
 import './theme'
 
-const API_BASE = window.location.origin + '/app-pagebank'
 
 interface CachedPage {
   url: string
@@ -32,7 +32,7 @@ export default function App() {
 
   const loadStats = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE}/page?stats=true`)
+      const res = await fetch(`${RESOURCE_ROUTE}/page?stats=true`)
       const data = await res.json()
       setPages((data.pages || []).filter((p: CachedPage) => p.url))
     } catch { /* ignore */ }
@@ -41,7 +41,7 @@ export default function App() {
   useEffect(() => { loadStats() }, [loadStats])
 
   const loadPanels = useCallback((fullUrl: string) => {
-    const cacheUrl = `${API_BASE}/page?url=${encodeURIComponent(fullUrl)}`
+    const cacheUrl = `${RESOURCE_ROUTE}/page?url=${encodeURIComponent(fullUrl)}`
 
     setOriginLoading(true)
     setOriginLoaded(false)
@@ -97,7 +97,7 @@ export default function App() {
     setShowDeleteModal(false)
     setPages([])
     try {
-      await fetch(`${API_BASE}/page?all=true`, { method: 'DELETE' })
+      await fetch(`${RESOURCE_ROUTE}/page?all=true`, { method: 'DELETE' })
       loadStats()
     } catch { /* ignore */ }
   }, [loadStats])
@@ -114,7 +114,7 @@ export default function App() {
       <nav className="nav">
         <div className="nav-left">
           <a href="/">
-            <img src={`${import.meta.env.BASE_URL}logo_white.svg`} alt="Yeti" className="nav-logo" />
+            <img src="logo_white.svg" alt="Yeti" className="nav-logo" />
           </a>
         </div>
         <span className="nav-title">PageBank</span>
@@ -208,6 +208,7 @@ export default function App() {
             <iframe ref={cacheRef} title="Yeti Cache" />
           </div>
         </div>
+        <Footer />
       </main>
 
       {showDeleteModal && (
