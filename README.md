@@ -48,7 +48,7 @@ Restart yeti. PageBank compiles automatically on first load (~2 minutes) and is 
 ### 2. Fetch a page (cache miss)
 
 ```bash
-curl -s -D - "https://localhost/app-pagebank/api/page?url=https://example.com"
+curl -s -D - "https://localhost:9996/app-pagebank/api/page?url=https://example.com"
 ```
 
 Response headers:
@@ -73,7 +73,7 @@ The page was fetched from `https://example.com`, stored in the cache, and return
 ### 3. Fetch the same page (cache hit)
 
 ```bash
-curl -s -D - "https://localhost/app-pagebank/api/page?url=https://example.com"
+curl -s -D - "https://localhost:9996/app-pagebank/api/page?url=https://example.com"
 ```
 
 Response headers:
@@ -89,7 +89,7 @@ Same content, but now served from cache. The `X-Cache: HIT` header confirms no o
 ### 4. View cache statistics
 
 ```bash
-curl -s "https://localhost/app-pagebank/api/page?stats=true" | jq
+curl -s "https://localhost:9996/app-pagebank/api/page?stats=true" | jq
 ```
 
 Response:
@@ -111,7 +111,7 @@ Response:
 ### 5. Invalidate a cached page
 
 ```bash
-curl -s -X DELETE "https://localhost/app-pagebank/api/page?url=https://example.com" | jq
+curl -s -X DELETE "https://localhost:9996/app-pagebank/api/page?url=https://example.com" | jq
 ```
 
 Response:
@@ -124,7 +124,7 @@ Response:
 ### 6. Purge the entire cache
 
 ```bash
-curl -s -X DELETE "https://localhost/app-pagebank/api/page?all=true" | jq
+curl -s -X DELETE "https://localhost:9996/app-pagebank/api/page?all=true" | jq
 ```
 
 Response:
@@ -193,10 +193,10 @@ Transparent caching proxy for any URL:
 
 ```bash
 # Fetch and cache a page
-curl "https://localhost/app-pagebank/api/page?url=https://news.ycombinator.com"
+curl "https://localhost:9996/app-pagebank/api/page?url=https://news.ycombinator.com"
 
 # Fetch and cache a JSON API
-curl "https://localhost/app-pagebank/api/page?url=https://api.github.com/repos/yetirocks/yeti"
+curl "https://localhost:9996/app-pagebank/api/page?url=https://api.github.com/repos/yetirocks/yeti"
 ```
 
 The resource handler:
@@ -219,7 +219,7 @@ Response headers on every request:
 Returns a JSON inventory of all cached pages without their content bodies:
 
 ```bash
-curl -s "https://localhost/app-pagebank/api/page?stats=true" | jq
+curl -s "https://localhost:9996/app-pagebank/api/page?stats=true" | jq
 ```
 
 Each entry includes `url`, `contentType`, `statusCode`, `cachedAt`, and `size` (byte count of cached content). Useful for monitoring cache utilization and debugging.
@@ -229,7 +229,7 @@ Each entry includes `url`, `contentType`, `statusCode`, `cachedAt`, and `size` (
 Purge a single cached page by its URL:
 
 ```bash
-curl -X DELETE "https://localhost/app-pagebank/api/page?url=https://example.com"
+curl -X DELETE "https://localhost:9996/app-pagebank/api/page?url=https://example.com"
 ```
 
 Returns 404 if the URL is not in the cache. The next GET for that URL triggers a fresh origin fetch.
@@ -239,7 +239,7 @@ Returns 404 if the URL is not in the cache. The next GET for that URL triggers a
 Purge the entire cache:
 
 ```bash
-curl -X DELETE "https://localhost/app-pagebank/api/page?all=true"
+curl -X DELETE "https://localhost:9996/app-pagebank/api/page?all=true"
 ```
 
 Returns the count of deleted entries. Useful after origin deployments or configuration changes.
@@ -274,7 +274,7 @@ Real-time cache updates are available via SSE and MQTT from the `@export` direct
 
 ```bash
 # SSE -- watch for new cache entries
-curl "https://localhost/app-pagebank/api/PageCache?stream=sse"
+curl "https://localhost:9996/app-pagebank/api/PageCache?stream=sse"
 
 # MQTT -- subscribe to cache changes
 mosquitto_sub -t "app-pagebank/PageCache" -h localhost -p 8883
@@ -289,7 +289,7 @@ The built-in React dashboard provides a side-by-side comparison view:
 - **Speed badge** -- shows the speedup factor (e.g., "12.3x faster") when the cache outperforms origin
 - **Bulk delete** -- confirmation modal for purging the entire cache
 
-Access the UI at `https://localhost/app-pagebank/`.
+Access the UI at `https://localhost:9996/app-pagebank/`.
 
 ### MCP Tools (auto-generated)
 
