@@ -20,7 +20,7 @@ resource!(PageCache {
                 "cachedAt": r["cachedAt"],
                 "size": r["pageContents"].as_str().map(|s| s.len()).unwrap_or(0)
             })).collect();
-            return reply().json(json!({"cachedPages": records.len(), "pages": pages}));
+            return ok(json!({"cachedPages": records.len(), "pages": pages}));
         }
 
         // Require ?url= parameter
@@ -81,7 +81,7 @@ resource!(PageCache {
                     let _ = table.delete(key).await;
                 }
             }
-            return reply().json(json!({"message": format!("Deleted {} cached pages", count), "count": count}));
+            return ok(json!({"message": format!("Deleted {} cached pages", count), "count": count}));
         }
 
         // Delete one by ?url=
@@ -92,7 +92,7 @@ resource!(PageCache {
 
         if table.does_exist(&target_url).await? {
             table.delete(&target_url).await?;
-            reply().json(json!({"message": format!("Invalidated {}", target_url)}))
+            ok(json!({"message": format!("Invalidated {}", target_url)}))
         } else {
             not_found(&format!("No cache entry for {}", target_url))
         }
