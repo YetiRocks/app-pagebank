@@ -38,7 +38,6 @@ resource!(PageCache {
             return reply()
                 .header("x-cache", "HIT")
                 .header("x-cached-at", record["cachedAt"].as_str().unwrap_or(""))
-                .code(200)
                 .type_header(ct)
                 .send(html.as_bytes().to_vec());
         }
