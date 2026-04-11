@@ -8,9 +8,9 @@ use yeti_sdk::prelude::*;
 // DELETE /page?all=true         - invalidate all
 resource!(PageCache {
     name = "page",
-    get(request, ctx) => {
+    get(ctx) => {
         // Stats endpoint
-        if ctx.get("stats").is_some() {
+        if ctx.query("stats").is_some() {
             let table = ctx.get_table("PageCache")?;
             let records: Vec<Value> = table.get_all().await?;
             let pages: Vec<Value> = records.iter().map(|r| json!({
@@ -24,7 +24,7 @@ resource!(PageCache {
         }
 
         // Require ?url= parameter
-        let target_url = match ctx.get("url") {
+        let target_url = match ctx.query("url") {
             Some(u) => u.to_string(),
             None => return bad_request("Missing ?url= parameter"),
         };
@@ -69,11 +69,11 @@ resource!(PageCache {
             .type_header(&ct)
             .send(response.body.into_bytes())
     },
-    delete(request, ctx) => {
+    delete(ctx) => {
         let table = ctx.get_table("PageCache")?;
 
         // Delete all
-        if ctx.get("all").is_some() {
+        if ctx.query("all").is_some() {
             let records: Vec<Value> = table.get_all().await?;
             let count = records.len();
             for record in &records {
@@ -85,7 +85,7 @@ resource!(PageCache {
         }
 
         // Delete one by ?url=
-        let target_url = match ctx.get("url") {
+        let target_url = match ctx.query("url") {
             Some(u) => u.to_string(),
             None => return bad_request("Missing ?url= parameter"),
         };
