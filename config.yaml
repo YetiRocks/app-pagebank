@@ -7,15 +7,15 @@ schemas:
 
 resources:
   path: resources/*.rs
-  route: /api
+  root: /api
 
 static:
   path: web
-  route: /
+  root: /
   spa: true
   build:
     source: source
-    command: npm run build
+    command: npm install && npm run build
 
 env:
   PAGEBANK_ORIGIN_URL: "https://www.example.com"

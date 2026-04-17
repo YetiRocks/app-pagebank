@@ -32,7 +32,7 @@ export default function App() {
 
   const loadStats = useCallback(async () => {
     try {
-      const res = await fetch(`${RESOURCE_ROUTE}/page?stats=true`)
+      const res = await fetch(`${__STATIC_ROOT__}/${__RESOURCES_ROOT__}/page?stats=true`)
       const data = await res.json()
       setPages((data.pages || []).filter((p: CachedPage) => p.url))
     } catch { /* ignore */ }
@@ -41,7 +41,7 @@ export default function App() {
   useEffect(() => { loadStats() }, [loadStats])
 
   const loadPanels = useCallback((fullUrl: string) => {
-    const cacheUrl = `${RESOURCE_ROUTE}/page?url=${encodeURIComponent(fullUrl)}`
+    const cacheUrl = `${__STATIC_ROOT__}/${__RESOURCES_ROOT__}/page?url=${encodeURIComponent(fullUrl)}`
 
     setOriginLoading(true)
     setOriginLoaded(false)
@@ -97,7 +97,7 @@ export default function App() {
     setShowDeleteModal(false)
     setPages([])
     try {
-      await fetch(`${RESOURCE_ROUTE}/page?all=true`, { method: 'DELETE' })
+      await fetch(`${__STATIC_ROOT__}/${__RESOURCES_ROOT__}/page?all=true`, { method: 'DELETE' })
       loadStats()
     } catch { /* ignore */ }
   }, [loadStats])
@@ -114,7 +114,7 @@ export default function App() {
       <nav className="nav">
         <div className="nav-left">
           <a href="/">
-            <img src={`${STATIC_ROUTE}logo_white.svg`} alt="Yeti" className="nav-logo" />
+            <img src={"/logo_white.svg"} alt="Yeti" className="nav-logo" />
           </a>
         </div>
         <span className="nav-title">PageBank</span>
