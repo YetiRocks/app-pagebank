@@ -11,7 +11,7 @@ resource!(PageCache {
     get(ctx) => {
         // Stats endpoint
         if ctx.query("stats").is_some() {
-            let table = ctx.get_table("PageCache")?;
+            let table = ctx.table("PageCache")?;
             let records: Vec<Value> = table.get_all().await?;
             let pages: Vec<Value> = records.iter().map(|r| json!({
                 "url": r["url"],
@@ -29,7 +29,7 @@ resource!(PageCache {
             None => return bad_request("Missing ?url= parameter"),
         };
 
-        let table = ctx.get_table("PageCache")?;
+        let table = ctx.table("PageCache")?;
 
         // Cache hit
         if let Some(record) = table.get(&target_url).await? {
@@ -70,7 +70,7 @@ resource!(PageCache {
             .send(response.body.into_bytes())
     },
     delete(ctx) => {
-        let table = ctx.get_table("PageCache")?;
+        let table = ctx.table("PageCache")?;
 
         // Delete all
         if ctx.query("all").is_some() {
