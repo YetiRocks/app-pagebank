@@ -1,0 +1,20 @@
+name: "Page Bank"
+app_id: "app-pagebank"
+customer_id: "yeti"
+version: "1.0.0"
+description: "Page Bank"
+
+schemas:
+  path: schemas/schema.graphql
+
+resources:
+  path: "resources/*.rs"
+  root: /api
+
+static:
+  path: web
+  root: /
+  spa: true
+  build:
+    source: source
+    command: npm install && npm run build
