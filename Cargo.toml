@@ -11,3 +11,4 @@ resources = "resources/*.rs"
 static = { path = "web", root = "/", source = "source", spa = true, build = "npm install && npm run build" }
 
 [dependencies]
+tracing = "0.1"
