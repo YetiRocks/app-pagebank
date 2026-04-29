@@ -43,7 +43,7 @@ resource!(PageCache {
         }
 
         // Cache miss - fetch from origin
-        yeti_log!(info, "Cache miss, fetching {}", target_url);
+        tracing::info!("Cache miss, fetching {}", target_url);
 
         let response = fetch!(&target_url).send()?;
 
