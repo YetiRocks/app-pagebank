@@ -317,30 +317,18 @@ MCP tools for PageCache table operations are auto-generated from the `@export` s
 
 ## Configuration
 
-### config.yaml
+### Cargo.toml
 
-```yaml
-name: "Page Bank"
-app_id: "app-pagebank"
-version: "1.0"
-schemas:
-  path: schemas/schema.graphql
+App configuration lives under `[package.metadata.app]` in `Cargo.toml` (no more `config.yaml` / `services.yaml`):
 
-resources:
-  path: resources/*.rs
-  route: /api
-
-static:
-  path: web
-  route: /
-  spa: true
-  build:
-    source: source
-    command: npm run build
-
-env:
-  PAGEBANK_ORIGIN_URL: "https://www.example.com"
+```toml
+[package.metadata.app]
+schemas = "schemas/schema.graphql"
+resources = "resources/*.rs"
+static = { path = "web", source = "source", spa = true, build = "npm install && npm run build" }
 ```
+
+`PAGEBANK_ORIGIN_URL` is read from the process environment at runtime.
 
 ### Environment Variables
 
@@ -377,19 +365,27 @@ Edit the `expiration` value in `schemas/schema.graphql`:
 
 ```
 app-pagebank/
-├── config.yaml              # App configuration + origin URL
+├── Cargo.toml               # App + [package.metadata.app] manifest
 ├── schemas/
 │   └── schema.graphql       # PageCache table with TTL + auto-export
 ├── resources/
 │   └── page_cache.rs        # Origin fetch + cache logic (101 lines)
-├── source/                  # React/Vite frontend
+├── source/                  # React/Vite frontend (one-page model)
 │   ├── package.json
 │   ├── vite.config.ts
 │   └── src/
-│       ├── App.tsx           # Side-by-side comparison UI
+│       ├── App.tsx           # Thin shell — auth gate + comparison UI
 │       ├── main.tsx          # Entry point
-│       ├── theme.ts          # Yeti design tokens
-│       └── *.css             # Styles
+│       ├── api.ts            # Fetch helpers
+│       ├── types.ts          # Shared TypeScript types
+│       ├── utils.ts          # Pure helpers (formatters, etc.)
+│       ├── components/       # Reusable UI
+│       ├── hooks/            # React hooks (includes useAuth.ts)
+│       ├── pages/            # Page components (includes Login.tsx)
+│       └── styles/
+│           ├── _vars.css     # Per-app brand tokens
+│           ├── yeti.css      # Canonical Yeti stylesheet
+│           └── index.css     # App-specific overrides
 └── web/                     # Built static assets (served by yeti)
 ```
 
@@ -397,14 +393,27 @@ app-pagebank/
 
 ## Authentication
 
-PageBank uses yeti's built-in auth system. In development mode, all endpoints are accessible without authentication. In production:
+PageBank uses yeti's built-in auth system. To require sign-in, add a `[package.metadata.auth]` block to `Cargo.toml`:
+
+```toml
+[package.metadata.auth]
+allow_signup = true
+default_role = "admin"
+
+[package.metadata.auth.oauth]
+providers = [
+  { name = "google", client_id = "${GOOGLE_CLIENT_ID}", client_secret = "${GOOGLE_CLIENT_SECRET}" },
+]
+```
+
+In development mode (no providers configured), all endpoints are accessible without authentication. In production:
 
 - **JWT**, **Basic Auth**, and **OAuth** supported (configured via yeti-auth)
 - The `/page` resource endpoint follows standard yeti auth enforcement
 - The `PageCache` auto-generated CRUD endpoints follow the same auth rules
 - SSE and MQTT subscriptions require authentication in production
 
-No special auth configuration is needed in PageBank itself -- it inherits the authentication policy from the yeti instance it runs on.
+**Frontend gate:** PageBank ships a configurable `src/pages/Login.tsx` and a `src/hooks/useAuth.ts` hook. `App.tsx` calls `useAuth()` and renders `<Login/>` when sign-in is required. If no auth providers are configured, `useAuth` returns `true` and the gate is a no-op.
 
 ---
 
