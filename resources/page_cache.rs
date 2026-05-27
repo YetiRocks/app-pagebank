@@ -45,13 +45,17 @@ resource!(PageCache {
         // Cache miss - fetch from origin
         tracing::info!("Cache miss, fetching {}", target_url);
 
-        let response = fetch!(&target_url).send()?;
+        let response = fetch(&target_url).send()?;
 
         let ct = response.header("content-type").unwrap_or("text/html").to_string();
         let now = unix_timestamp()?.to_string();
 
-        // Store in cache using the full URL as key
+        // Store in cache using the full URL as both the primary key (id)
+        // and the queryable `url` index. The auto-CRUD path on
+        // /app-pagebank/api/pagecache stores under `id`; storing the URL
+        // here keeps the custom resource and auto-CRUD in agreement.
         let record = json!({
+            "id": target_url,
             "url": target_url,
             "pageContents": response.body,
             "contentType": ct,
