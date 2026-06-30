@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Yeti runtime base: the web server injects window.__YETI_BASE_PATH for
+         the deployment mount (right after <head>); derive the no-trailing-slash
+         static root before any module evaluates. Absent (npm run dev) -> "/". -->
+    <script>window.__YETI_STATIC_ROOT__=(window.__YETI_BASE_PATH||'/').replace(/\/$/,'');</script>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
