@@ -1,4 +1,4 @@
-type PageCache @table(database: "app-pagebank") @store(evictAfter: 3600) @export {
+type PageCache @table(database: "app-pagebank") @distribute @store(evictAfter: 3600) @export @access(public: [read, create, update, delete]) {
   id: ID! @primaryKey
   url: String! @indexed
   pageContents: String
