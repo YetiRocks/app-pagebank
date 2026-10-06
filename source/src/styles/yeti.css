@@ -467,6 +467,35 @@ code {
   }
 }
 
+/* Phone width: a panel header is a fixed 51px row inside a column that may be
+ * only ~100-160px wide, so long titles spilled above and below it and its
+ * badges, buttons and inputs ran past the panel's clipped right edge. Below
+ * 600px the header wraps and grows to fit, and its controls shrink to the
+ * column. */
+@media (max-width: 600px) {
+  .panel-header {
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+    height: auto;
+    min-height: 51px;
+    padding: var(--space-2) var(--space-3);
+
+    & > *,
+    & .header-actions > * {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    & .header-actions {
+      flex-wrap: wrap;
+    }
+
+    & .panel-badge {
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
 /* ── Buttons ── */
 .btn {
   display: inline-flex;
