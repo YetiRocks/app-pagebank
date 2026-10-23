@@ -263,7 +263,7 @@ Full CRUD on the PageCache table is auto-generated from the `@export` schema dir
 
 | Endpoint | Methods | Description |
 |----------|---------|-------------|
-| `/app-pagebank/api/PageCache` | GET, POST | List/create cache entries |
+| `/app-pagebank/api/PageCache/` | GET, POST | List/create cache entries |
 | `/app-pagebank/api/PageCache/{url}` | GET, PUT, DELETE | Read/update/delete a cache entry |
 
 These endpoints operate on the raw table data and are separate from the `/page` resource which handles the proxy logic.
